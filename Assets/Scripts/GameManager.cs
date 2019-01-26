@@ -5,10 +5,10 @@ using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour {
-    private int[] combination; // Final combination.
-    private int[] objectStates = {1,1,1,1,1,1,1,1}; //Real time object variations.
+    public int[] combination; // Final combination.
+    public int[] objectStates = {1,1,1,1,1,1,1,1}; //Real time object variations.
 
-    private string[] clues;
+    public string[] clues;
     
     
     public void StartGame() {
@@ -17,8 +17,6 @@ public class GameManager : MonoBehaviour {
 
     public void Start() {
         Debug.Log("Start!");
-        //GenerateCombination(8);
-        //GenerateClues(2,8,8);
     }
 
     public void GenerateCombination(int objectCount) {
@@ -77,7 +75,6 @@ public class GameManager : MonoBehaviour {
 
     public string[] reshuffle(string[] clues)
     {
-        // Knuth shuffle algorithm :: courtesy of Wikipedia :)
         for (int i = 0; i < clues.Length; i++ )
         {
             string tmp = clues[i];
