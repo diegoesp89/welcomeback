@@ -1,7 +1,8 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Random = UnityEngine.Random;
 
 public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -12,7 +13,7 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
      * info: (Object, Variant)
      * info2: (Object, Variant) Used if type == 2
      * Note: 0 <= Object < Number of Objects
-     *       0 <= Variant < Number of Variants
+     *       0 <= Variant < Number of Variants    
      */
     private struct Clue
     {
