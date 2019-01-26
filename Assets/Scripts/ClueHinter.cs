@@ -5,6 +5,19 @@ using UnityEngine.EventSystems;
 
 public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+
+    /**
+     * Clue Format
+     * type: 0->Positive, 1->Negative, 2->XOR
+     * info: (Object, Variant)
+     * info2: (Object, Variant) Used if type == 2
+     */
+    private struct Clue
+    {
+        public int type;
+        public (int o, int v) info;
+        public (int o, int v) info2;
+    }
     private string[] clues;
     public string[] GenerateClues(int clueCountPositive, int clueCountNegative, int clueCountMixed)
     {
@@ -51,16 +64,16 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
 
     /** 
-     * Gets Clues in a non-String Format and checks if it's enough information to solve the puzzle
+     * Gets List of Clues and checks if it's enough information to solve the puzzle
      */
-    private bool CheckValidClues()
+    private bool CheckValidClues(List<Clue> Clues)
     {
         int Objects = 8, Variants = 3;
 
         int[,] SolArray = new int[Objects, Variants]; //Objects, Variants
         //Fill SolArray
-        for (size_t i = 0; i < Objects; i++) for (size_t j = 0; j < Variants; j++)
-                SolArray[i][j] = -1;
+        for (int i = 0; i < Objects; i++) for (int j = 0; j < Variants; j++)
+                SolArray[i, j] = -1;
 
         //First Pass /Preprocessing
         //Heavily Depends on Format of Clues
@@ -73,15 +86,15 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             count++;
             change = false;
             //Check if there's enough info for each Object
-            for (size_t i = 0; i < Objects; i++)
+            for (int i = 0; i < Objects; i++)
             {
                 //Count Negatives (0) and Positives (1)
                 int neg = 0;
                 int pos = 0;
-                for (size_t j = 0; j < Variants; j++)
+                for (int j = 0; j < Variants; j++)
                 {
-                    neg += (SolArray[i][j] == 0);
-                    pos += (SolArray[i][j] == 1);
+                    neg += (SolArray[i, j] == 0) ? 1 : 0;
+                    pos += (SolArray[i, j] == 1) ? 1 : 0;
                 }
 
                 if (pos == 1)
@@ -97,24 +110,25 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 if (neg == Variants - 1)
                 {
                     change = true;
-                    for (size_t j = 0; j < Variants; j++) if (SolArray[i][j] != 0)
+                    for (int j = 0; j < Variants; j++) if (SolArray[i, j] != 0)
                         {
                             int o, v;
-                            //Get o and v (depends on preprocessing)
+                            o = (SolArray[i, j] - 2) % Variants;
+                            v = (SolArray[i, j] - 2) / Variants;
 
-                            if (SolArray[o][v] == 1)
+                            if (SolArray[o, v] == 1)
                             {
                                 //Something went wrong
                             }
-                            SolArray[i][j] = 1; //This has to be true (all others variants are false)
-                            SolArray[o][v] = 0; //This can't be true
+                            SolArray[i, j] = 1; //This has to be true (all others variants are false)
+                            SolArray[o, v] = 0; //This can't be true
                             break;
                         }
                 }
             }
         }
         int solved = 0;
-        for (size_t i = 0; i < Objects; i++) for (size_t j = 0; j < Variants; j++) solved += (SolArray[i][j] == 1);
+        for (int i = 0; i < Objects; i++) for (int j = 0; j < Variants; j++) solved += (SolArray[i, j] == 1) ? 1 : 0;
 
         if (solved < Objects)
         {
