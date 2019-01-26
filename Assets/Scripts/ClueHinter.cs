@@ -63,21 +63,23 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 return "An error has ocurred. Rip Game.";
         }
     }
+    /**
+     * Shows individual clue, from a person.
+     */
+    public string GetClue(int index, string obj, string state) {
+        return clues[index].Replace("%s%", state).Replace("%o%", obj);
+    }
 
     public void ShowClues() {
         //TODO SHOW BOX FOR HINTS
     }
     
     
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        Debug.Log("woo");
+    public void OnPointerEnter(PointerEventData eventData){
         this.GetComponent<RectTransform>().localScale = new Vector3(1.2f, 1.2f);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        Debug.Log("woo");
+    public void OnPointerExit(PointerEventData eventData){
         this.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f);
     }
     private void OnMouseExit() {
