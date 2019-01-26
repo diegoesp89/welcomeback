@@ -1,7 +1,10 @@
+using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GameManager : UnityEngine.MonoBehaviour {
-    private int[] combination;
+public class GameManager : MonoBehaviour {
+    private int[] combination; // Final combination.
+    private int[] objectStates = {1,1,1,1,1,1,1,1}; //Real time object variations.
+
     private string[] clues;
     
     
@@ -11,10 +14,28 @@ public class GameManager : UnityEngine.MonoBehaviour {
 
     public void GenerateCombination(int objectCount) {
         for (int i = 0; i < objectCount; i++) {
-            combination[i] = Random.Range(0, 2); //0, 1 or 2.
+            combination[i] = Random.Range(1, 3); //0, 1 or 2.
         }
         //GENERATES AN ARRAY OF N ELEMENTS, EACH INDEX IS AN ID OF AN OBJECT. THE NUMBERS INSIDE CORRESPOND TO THE VARIATIONS.
     }
+
+    public void ChangeObjectState(int id, int state) {
+        objectStates[id] = state;
+    }
+
+    public bool CheckWin() {
+        bool win = true;
+        for (int j = 0; j < combination.Length; j++) {
+            if (combination[j] != objectStates[j]) {
+                win = false;
+                break;
+            }
+        }
+        //  Returns if all object variations are equal to the final combination.
+        return win;
+    }
+    
+    
 
     public void GenerateClues(int clueCount) {
         /*
@@ -37,4 +58,5 @@ public class GameManager : UnityEngine.MonoBehaviour {
                 return "An error has ocurred. Rip Game.";
         }
     }
+    
 }
