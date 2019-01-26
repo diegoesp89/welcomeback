@@ -6,21 +6,23 @@ using UnityEngine;
 public class SoundCycler : MonoBehaviour {
 	public AudioClip[] sounds;
 	public GameManager gameManager;
+	public AudioManager audioMan;
+	
 	public int id;
 
 	private int currentSound;
-	private AudioSource source;
 	
 	void Start (){
 		if(gameManager==null) {
 			gameManager = FindObjectOfType<GameManager>();
 		}
 
-		source = GetComponent<AudioSource>();
+		if (audioMan == null) {
+			audioMan = FindObjectOfType<AudioManager>();
+		}
 		//Make initial image random.
 		currentSound = Random.Range(0,2);
-		source.clip = sounds[currentSound];
-		source.Play();
+		audioMan.ChangeSong(sounds[currentSound]);
 		gameManager.ChangeObjectState(id, currentSound+1);
 	}
 
@@ -37,8 +39,6 @@ public class SoundCycler : MonoBehaviour {
 			currentSound = 0;
 		}
 
-		GetComponent<AudioSource>().clip = sounds[currentSound];
-		
-		source.Play();
+		audioMan.ChangeSong(sounds[currentSound]);		
 	}
 }
