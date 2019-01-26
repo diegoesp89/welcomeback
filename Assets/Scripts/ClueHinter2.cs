@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class ClueHinter2 : MonoBehaviour
 {
+        public GameManager gameMan;
+        public int[] solution;
         public string[] clues = {"","","","","","","","","","","","","","","","","",""};
 
         public string[] o1 = {"Poster","Frutas","Mapa"};
@@ -16,12 +18,15 @@ public class ClueHinter2 : MonoBehaviour
         public string[] o7 = {"Tocadisco","Radio moderna","Radio antigua"};
         public string[] o8 = {"Gato","Perro","Loro"};
 
+        public string[] objects;
+
         //public string[] objects = {o1,o2};
      //   public string[][] objects = {o1,o2,o3,o4,o5,o6,o7,o8};
     
     void Start(){
           Debug.Log("clueHinter start2");
           GenerateClues(3,9,8);
+          solution = gameMan.combination;
           //Debug.Log(GetClueTemplate(0,"a","b","",""));
     }
 
@@ -93,13 +98,13 @@ public class ClueHinter2 : MonoBehaviour
         switch (number)
         {
             case 0:
-               ret = "I like the "+obj+" like "+stat+"";
+               ret = "Me gusta cuando "+obj+" esta como "+stat+"";
                 return ret;
             case 1:
-              //  ret =  "I dont like "+object+" "+status+"";
+                ret =  "No me gusta "+obj+" cuando esta como "+stat+"";
                 return ret;
             case 2:
-              //  ret =  "I really dont like when "+object+" is "+status+"and  "+object2+" is "+status2+" at the same time";
+                ret =  "Si "+obj+" esta "+stat+" entonces tampoco me gusta que "+obj2+" este "+stat2+"";
                 return ret;
             default:
                 return "An error has ocurred. Rip Game.";
