@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-
+    [SerializeField] int howManyPerson;
     /**
      * Clue Format
      * type: 0->Positive, 1->Negative, 2->XOR
@@ -47,6 +47,26 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
          * La idea sería conseguir clueCount cantidad de GetClueTemplate para poder armar las pistas iniciales y poder
          * darselas a nuestro usuario.
          */
+    }
+
+    public string[] gimmeClues(int person, int cluesPerPerson){
+        //int person es el id de la persona, debe empezar por 0 y si son 4 personas llega hasta 3
+        int cluesCount = clues.Length;
+        string[] cluesResponse = new string[cluesPerPerson];
+        int index = 0;
+
+        int rangeMax = (person + 1) * cluesPerPerson;
+        int rangeMin = (person - 1) * cluesPerPerson;
+        rangeMin = (rangeMin < 0) ? 0 : rangeMin;
+        rangeMax = (rangeMax > cluesCount) ? cluesCount : rangeMax;
+        
+        for (int i = rangeMin; i < rangeMax; i++)
+        {
+            cluesResponse[index] = clues[index];
+            index++;   
+        }
+
+        return cluesResponse;    
     }
 
     public string[] reshuffle(string[] clues)
