@@ -37,7 +37,20 @@ public class GameManager : MonoBehaviour {
     
     
 
-    public void GenerateClues(int clueCount) {
+    public void GenerateClues(int clueCountPositive, int clueCountNegative, int clueCountMixed) {
+
+        int count = 0;
+        for(int i = 0; i < clueCountPositive; i++){
+            clues[i] = GetClueTemplate(0);
+            count++;
+        }
+        for(int i = 0; i < clueCountNegative; i++){
+
+        }
+        for(int i = 0; i < clueCountMixed; i++){
+
+        }
+
         /*
          * La idea sería conseguir clueCount cantidad de GetClueTemplate para poder armar las pistas iniciales y poder
          * darselas a nuestro usuario.
@@ -53,6 +66,10 @@ public class GameManager : MonoBehaviour {
          */
         switch (number) {
             case 0:
+                return "The %o% is %j%";
+            case 1:
+                return "The %o% is not %j%";
+            case 2:
                 return "The %0% likes the same TV Volume as the %1%";
             default:
                 return "An error has ocurred. Rip Game.";
