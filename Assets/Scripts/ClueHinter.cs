@@ -6,7 +6,7 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 {
     [SerializeField] int howManyPerson;
     GameManager gameManRef;
-    public int[] solution; 
+    public int[] solution;
     /**
      * Clue Format
      * type: 0->Positive, 1->Negative, 2->XOR
@@ -19,15 +19,17 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private struct Clue
     {
         public int type;
-        public Tuple<int, int> info;
-        public Tuple<int, int> info2;
+        public int object1;
+        public int variant1;
+        public int object2;
+        public int variant2;
     }
     private string[] clues;
 
     public /// <summary>
-    /// Start is called on the frame when a script is enabled just before
-    /// any of the Update methods is called the first time.
-    /// </summary>
+           /// Start is called on the frame when a script is enabled just before
+           /// any of the Update methods is called the first time.
+           /// </summary>
     void Start()
     {
         gameManRef.GenerateCombination(8);
@@ -63,7 +65,8 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
          */
     }
 
-    public string[] gimmeClues(int person, int cluesPerPerson){
+    public string[] gimmeClues(int person, int cluesPerPerson)
+    {
         //int person es el id de la persona, debe empezar por 0 y si son 4 personas llega hasta 3
         int cluesCount = clues.Length;
         string[] cluesResponse = new string[cluesPerPerson];
@@ -73,14 +76,14 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         int rangeMin = (person - 1) * cluesPerPerson;
         rangeMin = (rangeMin < 0) ? 0 : rangeMin;
         rangeMax = (rangeMax > cluesCount) ? cluesCount : rangeMax;
-        
+
         for (int i = rangeMin; i < rangeMax; i++)
         {
             cluesResponse[index] = clues[index];
-            index++;   
+            index++;
         }
 
-        return cluesResponse;    
+        return cluesResponse;
     }
 
     public string[] reshuffle(string[] clues)
@@ -117,36 +120,36 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 case 0:
                     for (int i = 0; i < Variants; i++)
                     {
-                        if (SolArray[C.info.Item1, i] > 1)
+                        if (SolArray[C.object1, i] > 1)
                         {
                             int o, v;
-                            v = (SolArray[C.info.Item1, i] - 2) % Variants;
-                            o = (SolArray[C.info.Item1, i] - 2) / Variants;
+                            v = (SolArray[C.object1, i] - 2) % Variants;
+                            o = (SolArray[C.object1, i] - 2) / Variants;
                         }
-                        SolArray[C.info.Item1, i] = (i == C.info.Item2) ? 1 : 0;
+                        SolArray[C.object1, i] = (i == C.variant1) ? 1 : 0;
                     }
                     break;
                 case 1:
-                    SolArray[C.info.Item1, C.info.Item2] = 0;
+                    SolArray[C.object1, C.variant1] = 0;
                     break;
                 case 2:
-                    if (SolArray[C.info.Item1, C.info.Item2] == 1 && SolArray[C.info2.Item1, C.info2.Item2] == 1)
+                    if (SolArray[C.object1, C.variant1] == 1 && SolArray[C.object1, C.variant2] == 1)
                     {
                         Debug.Log("Contradiction with Clue Type 2");
                         return false;
                     }
-                    if (SolArray[C.info.Item1, C.info.Item2] == 1)
+                    if (SolArray[C.object1, C.variant1] == 1)
                     {
-                        SolArray[C.info2.Item1, C.info2.Item2] = 0;
+                        SolArray[C.object1, C.variant2] = 0;
                     }
-                    else if (SolArray[C.info2.Item1, C.info2.Item2] == 1)
+                    else if (SolArray[C.object1, C.variant2] == 1)
                     {
-                        SolArray[C.info.Item1, C.info.Item2] = 0;
+                        SolArray[C.object1, C.variant1] = 0;
                     }
                     else
                     {
-                        SolArray[C.info.Item1, C.info.Item2] = C.info2.Item2 + C.info2.Item1 * Variants + 2;
-                        SolArray[C.info2.Item1, C.info2.Item2] = C.info.Item2 + C.info.Item1 * Variants + 2;
+                        SolArray[C.object1, C.variant1] = C.variant2 + C.object1 * Variants + 2;
+                        SolArray[C.object1, C.variant2] = C.variant1 + C.object1 * Variants + 2;
                     }
                     break;
                 default:
