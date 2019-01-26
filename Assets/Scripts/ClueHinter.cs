@@ -7,7 +7,7 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 {
     [SerializeField] int howManyPerson;
     GameManager gameManRef;
-    public int[] solution;
+    public int[] solution; 
     /**
      * Clue Format
      * type: 0->Positive, 1->Negative, 2->XOR
@@ -26,13 +26,16 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         public int variant2;
     }
     private string[] clues;
-
-    public /// <summary>
-           /// Start is called on the frame when a script is enabled just before
-           /// any of the Update methods is called the first time.
-           /// </summary>
-    void Start()
-    {
+    
+    
+    /// <summary>
+    /// Start is called on the frame when a script is enabled just before
+    /// any of the Update methods is called the first time.
+    /// </summary>
+    public void Start(){
+        if (gameManRef == null) {
+            gameManRef = FindObjectOfType<GameManager>();
+        }
         gameManRef.GenerateCombination(8);
         solution = gameManRef.combination;
     }
@@ -66,8 +69,7 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
          */
     }
 
-    public string[] gimmeClues(int person, int cluesPerPerson)
-    {
+    public string[] gimmeClues(int person, int cluesPerPerson){
         //int person es el id de la persona, debe empezar por 0 y si son 4 personas llega hasta 3
         int cluesCount = clues.Length;
         string[] cluesResponse = new string[cluesPerPerson];
