@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void GenerateCombination(int objectCount) {
+        combination = new int[objectCount];
         for (int i = 0; i < objectCount; i++) {
             combination[i] = Random.Range(1, 3); //1, 2 or 3.
         }

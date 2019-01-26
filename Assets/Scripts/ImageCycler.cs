@@ -14,6 +14,10 @@ public class ImageCycler : MonoBehaviour {
 		if(gameManager==null) {
 			gameManager = FindObjectOfType<GameManager>();
 		}
+		//Make initial image random.
+		currentImage = Random.Range(0,2);
+		GetComponent<SpriteRenderer>().sprite = images[currentImage];
+		gameManager.ChangeObjectState(id, currentImage+1);
 	}
 	
 	public void OnMouseOver() {
