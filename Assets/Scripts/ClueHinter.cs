@@ -19,8 +19,8 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private struct Clue
     {
         public int type;
-        public (int o, int v) info;
-        public (int o, int v) info2;
+        public Tuple<int, int> info;
+        public Tuple<int, int> info2;
     }
     private string[] clues;
 
@@ -117,36 +117,36 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 case 0:
                     for (int i = 0; i < Variants; i++)
                     {
-                        if (SolArray[C.info.o, i] > 1)
+                        if (SolArray[C.info.Item1, i] > 1)
                         {
                             int o, v;
-                            v = (SolArray[C.info.o, i] - 2) % Variants;
-                            o = (SolArray[C.info.o, i] - 2) / Variants;
+                            v = (SolArray[C.info.Item1, i] - 2) % Variants;
+                            o = (SolArray[C.info.Item1, i] - 2) / Variants;
                         }
-                        SolArray[C.info.o, i] = (i == C.info.v) ? 1 : 0;
+                        SolArray[C.info.Item1, i] = (i == C.info.Item2) ? 1 : 0;
                     }
                     break;
                 case 1:
-                    SolArray[C.info.o, C.info.v] = 0;
+                    SolArray[C.info.Item1, C.info.Item2] = 0;
                     break;
                 case 2:
-                    if (SolArray[C.info.o, C.info.v] == 1 && SolArray[C.info2.o, C.info2.v] == 1)
+                    if (SolArray[C.info.Item1, C.info.Item2] == 1 && SolArray[C.info2.Item1, C.info2.Item2] == 1)
                     {
                         Debug.Log("Contradiction with Clue Type 2");
                         return false;
                     }
-                    if (SolArray[C.info.o, C.info.v] == 1)
+                    if (SolArray[C.info.Item1, C.info.Item2] == 1)
                     {
-                        SolArray[C.info2.o, C.info2.v] = 0;
+                        SolArray[C.info2.Item1, C.info2.Item2] = 0;
                     }
-                    else if (SolArray[C.info2.o, C.info2.v] == 1)
+                    else if (SolArray[C.info2.Item1, C.info2.Item2] == 1)
                     {
-                        SolArray[C.info.o, C.info.v] = 0;
+                        SolArray[C.info.Item1, C.info.Item2] = 0;
                     }
                     else
                     {
-                        SolArray[C.info.o, C.info.v] = C.info2.v + C.info2.o * Variants + 2;
-                        SolArray[C.info2.o, C.info2.v] = C.info.v + C.info.o * Variants + 2;
+                        SolArray[C.info.Item1, C.info.Item2] = C.info2.Item2 + C.info2.Item1 * Variants + 2;
+                        SolArray[C.info2.Item1, C.info2.Item2] = C.info.Item2 + C.info.Item1 * Variants + 2;
                     }
                     break;
                 default:
