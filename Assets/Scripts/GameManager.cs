@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour {
@@ -9,7 +11,13 @@ public class GameManager : MonoBehaviour {
     
     
     public void StartGame() {
-        
+       
+    }
+
+    public void Start() {
+        Debug.Log("Start!");
+        //GenerateCombination(8);
+        //GenerateClues(2,8,8);
     }
 
     public void GenerateCombination(int objectCount) {
@@ -37,7 +45,7 @@ public class GameManager : MonoBehaviour {
     
     
 
-    public void GenerateClues(int clueCountPositive, int clueCountNegative, int clueCountMixed) {
+    public string[] GenerateClues(int clueCountPositive, int clueCountNegative, int clueCountMixed) {
 
         int count = 0;
         for(int i = 0; i < clueCountPositive; i++){
@@ -45,16 +53,36 @@ public class GameManager : MonoBehaviour {
             count++;
         }
         for(int i = 0; i < clueCountNegative; i++){
-
+            clues[i+count] = GetClueTemplate(1);
+            count++;
         }
         for(int i = 0; i < clueCountMixed; i++){
-
+            clues[i+count] = GetClueTemplate(2);
+            count++;
         }
 
+        Debug.Log("Clues count: " + count);
+        clues = reshuffle(clues);
+
+        return clues;
         /*
          * La idea sería conseguir clueCount cantidad de GetClueTemplate para poder armar las pistas iniciales y poder
          * darselas a nuestro usuario.
          */
+    }
+
+    public string[] reshuffle(string[] clues)
+    {
+        // Knuth shuffle algorithm :: courtesy of Wikipedia :)
+        for (int i = 0; i < clues.Length; i++ )
+        {
+            string tmp = clues[i];
+            int rand = Random.Range(i, clues.Length);
+            clues[i] = clues[rand];
+            clues[rand] = tmp;
+        }
+
+        return clues;
     }
 
     /**
@@ -66,11 +94,11 @@ public class GameManager : MonoBehaviour {
          */
         switch (number) {
             case 0:
-                return "The %o% is %j%";
+                return "I like the %o% like %s%";
             case 1:
-                return "The %o% is not %j%";
+                return "I dont like %s% %o%";
             case 2:
-                return "The %0% likes the same TV Volume as the %1%";
+                return "I really dont like when %o% is %s%, and %o% is %s% at the same time";
             default:
                 return "An error has ocurred. Rip Game.";
         }
