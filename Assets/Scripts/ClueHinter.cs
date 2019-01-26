@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -241,6 +242,12 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             default:
                 return "An error has ocurred. Rip Game.";
         }
+    }
+    /**
+     * Shows individual clue, from a person.
+     */
+    public string GetClue(int index, string obj, string state) {
+        return clues[index].Replace("%s%", state).Replace("%o%", obj);
     }
 
     public void ShowClues()
