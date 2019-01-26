@@ -1,20 +1,22 @@
-﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Random = UnityEngine.Random;
 
 public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] int howManyPerson;
+    GameManager gameManRef;
+    public int[] solution; 
     /**
      * Clue Format
      * type: 0->Positive, 1->Negative, 2->XOR
      * info: (Object, Variant)
      * info2: (Object, Variant) Used if type == 2
      * Note: 0 <= Object < Number of Objects
-     *       0 <= Variant < Number of Variants    
+     *       0 <= Variant < Number of Variants
      */
+
     private struct Clue
     {
         public int type;
@@ -22,6 +24,16 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         public Tuple<int, int> info2;
     }
     private string[] clues;
+
+    public /// <summary>
+    /// Start is called on the frame when a script is enabled just before
+    /// any of the Update methods is called the first time.
+    /// </summary>
+    void Start()
+    {
+        gameManRef.GenerateCombination(8);
+        solution = gameManRef.combination;
+    }
     public string[] GenerateClues(int clueCountPositive, int clueCountNegative, int clueCountMixed)
     {
 
@@ -211,11 +223,13 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /**
      * Gets a number and returns the corresponding template.
      */
-    public string GetClueTemplate(int number){
+    public string GetClueTemplate(int number)
+    {
         /*
          * Esta es una idea de como generar los tipos de pistas.
          */
-        switch (number) {
+        switch (number)
+        {
             case 0:
                 return "I like the %o% like %s%";
             case 1:
@@ -233,21 +247,25 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         return clues[index].Replace("%s%", state).Replace("%o%", obj);
     }
 
-    public void ShowClues() {
+    public void ShowClues()
+    {
         //TODO SHOW BOX FOR HINTS
     }
-    
-    
+
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         Debug.Log("woo");
         this.GetComponent<RectTransform>().localScale = new Vector3(1.2f, 1.2f);
     }
 
-    public void OnPointerExit(PointerEventData eventData){
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Debug.Log("woo");
         this.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f);
     }
-    private void OnMouseExit() {
+    private void OnMouseExit()
+    {
         this.transform.localScale = new Vector3(1f, 1f);
     }
 }
