@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour {
 
     public void Start() {
         Debug.Log("Start!");
-        //GenerateCombination(8);
+        GenerateCombination(8);
     }
 
     public void GenerateCombination(int objectCount) {
