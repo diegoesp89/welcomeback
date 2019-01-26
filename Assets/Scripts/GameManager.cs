@@ -5,10 +5,9 @@ using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour {
-    private int[] combination; // Final combination.
-    private int[] objectStates = {1,1,1,1,1,1,1,1}; //Real time object variations.
+    public int[] combination; // Final combination.
+    public int[] objectStates = {1,1,1,1,1,1,1,1}; //Real time object variations.
 
-    
     
     public void StartGame() {
        
@@ -16,7 +15,7 @@ public class GameManager : MonoBehaviour {
 
     public void Start() {
         Debug.Log("Start!");
-        GenerateCombination(8);
+        //GenerateCombination(8);
     }
 
     public void GenerateCombination(int objectCount) {
