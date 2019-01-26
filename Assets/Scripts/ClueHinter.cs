@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] int howManyPerson;
+    GameManager gameManRef;
+    public int[] solution; 
     /**
      * Clue Format
      * type: 0->Positive, 1->Negative, 2->XOR
@@ -14,6 +15,7 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
      * Note: 0 <= Object < Number of Objects
      *       0 <= Variant < Number of Variants
      */
+
     private struct Clue
     {
         public int type;
@@ -21,6 +23,16 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         public (int o, int v) info2;
     }
     private string[] clues;
+
+    public /// <summary>
+    /// Start is called on the frame when a script is enabled just before
+    /// any of the Update methods is called the first time.
+    /// </summary>
+    void Start()
+    {
+        gameManRef.GenerateCombination(8);
+        solution = gameManRef.combination;
+    }
     public string[] GenerateClues(int clueCountPositive, int clueCountNegative, int clueCountMixed)
     {
 

@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class GameManager : MonoBehaviour {
     public int[] combination; // Final combination.
     public int[] objectStates = {1,1,1,1,1,1,1,1}; //Real time object variations.
-
+    
     
     public void StartGame() {
        
@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour {
             combination[i] = Random.Range(1, 3); //1, 2 or 3.
         }
         //GENERATES AN ARRAY OF N ELEMENTS, EACH INDEX IS AN ID OF AN OBJECT. THE NUMBERS INSIDE CORRESPOND TO THE VARIATIONS.
+        Debug.Log("Combination ready");
     }
 
     public void ChangeObjectState(int id, int state) {
