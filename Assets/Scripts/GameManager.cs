@@ -1,10 +1,8 @@
-
-using System;
 using Random = UnityEngine.Random;
 
 public class GameManager : UnityEngine.MonoBehaviour {
     private int[] combination;
-    private String[] clues;
+    private string[] clues;
     
     
     public void StartGame() {
@@ -28,7 +26,7 @@ public class GameManager : UnityEngine.MonoBehaviour {
     /**
      * Gets a number and returns the corresponding template.
      */
-    public String GetClueTemplate(int number) {
+    public string GetClueTemplate(int number) {
         /*
          * Esta es una idea de como generar los tipos de pistas.
          */
