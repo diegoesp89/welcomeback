@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour {
@@ -22,13 +23,16 @@ public class GameManager : MonoBehaviour {
 
     public void GenerateCombination(int objectCount) {
         for (int i = 0; i < objectCount; i++) {
-            combination[i] = Random.Range(1, 3); //0, 1 or 2.
+            combination[i] = Random.Range(1, 3); //1, 2 or 3.
         }
         //GENERATES AN ARRAY OF N ELEMENTS, EACH INDEX IS AN ID OF AN OBJECT. THE NUMBERS INSIDE CORRESPOND TO THE VARIATIONS.
     }
 
     public void ChangeObjectState(int id, int state) {
         objectStates[id] = state;
+        if (CheckWin()) {
+            SceneManager.LoadScene(2);
+        }
     }
 
     public bool CheckWin() {
