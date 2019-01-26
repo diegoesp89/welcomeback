@@ -1,0 +1,9 @@
+Library/
+obj/
+ProjectSettings/
+Temp/
+UnityPackageManager/
+Assembly-CSharp.csproj
+Welcome Back.sln
+Assets/Plugins/
+.idea/
