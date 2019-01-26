@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ClueHinter : MonoBehaviour
 {
-    [SerializeField] int howManyPerson;
-    GameManager gameManRef;
-    public int[] solution; 
+    public string[] clues = {"","","","","","","","","","","","","","","","","",""};
     /**
      * Clue Format
      * type: 0->Positive, 1->Negative, 2->XOR
@@ -17,7 +15,7 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
      *       0 <= Variant < Number of Variants
      */
 
-    private struct Clue
+    public struct Clue
     {
         public int type;
         public int object1;
@@ -25,7 +23,7 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         public int object2;
         public int variant2;
     }
-    private string[] clues;
+
     
     
     /// <summary>
@@ -33,29 +31,33 @@ public class ClueHinter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// any of the Update methods is called the first time.
     /// </summary>
     public void Start(){
-        if (gameManRef == null) {
+        Debug.Log("clueHinter start");
+       /* if (gameManRef == null) {
             gameManRef = FindObjectOfType<GameManager>();
-        }
-        gameManRef.GenerateCombination(8);
-        solution = gameManRef.combination;
+        }*/
+
+       // GenerateClues(2,8,8);
     }
     public string[] GenerateClues(int clueCountPositive, int clueCountNegative, int clueCountMixed)
     {
-
+        Debug.Log("generating clues");
         int count = 0;
         for (int i = 0; i < clueCountPositive; i++)
         {
             clues[i] = GetClueTemplate(0);
+            Debug.Log(clues[i]);
             count++;
         }
         for (int i = 0; i < clueCountNegative; i++)
         {
             clues[i + count] = GetClueTemplate(1);
+             Debug.Log(clues[i]);
             count++;
         }
         for (int i = 0; i < clueCountMixed; i++)
         {
             clues[i + count] = GetClueTemplate(2);
+             Debug.Log(clues[i]);
             count++;
         }
 
