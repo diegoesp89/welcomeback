@@ -12,50 +12,40 @@ public class ClueHinter2 : MonoBehaviour
         public string[] o0 = {"es un poster","es una pintura con frutas","es un mapa"};
         public string[] o1 = {"esta apagada", "esta encendida con volumen alto","esta encendida con volumen bajo"};
         public string[] o2 = {"estan cerradas","estan entreabiertas","estan abiertas"};
-        public string[] o3 = {"esta apagado","encendido pero fijo","encendido pero en movimiento"};
+        public string[] o3 = {"esta apagado","encendido sin movimiento","encendido pero en movimiento"};
         public string[] o4 = {"tiene frutas encima","tiene un florero encima","no tiene nada encima"};
         public string[] o5 = {"es reclinable","es una mecedora","es un sofa"};
         public string[] o6 = {"sea un tocadisco","sea una radio moderna","sea una radio antigua"};
         public string[] o7 = {"es un gato","es un perro","es un loro"};
 
-        //public int[] objetosIndex = {0,1,2,3,4,5,6,7};
-        public int[] objetosIndex = {0,1,2,3};
-        int[,] cluesInt = new int[4,5];
+        public int[] objetosIndex = {0,1,2,3,4,5,6,7};
+        public int[,] cluesInt = new int[16,5];
         
-        public struct Clue
-    {
-        public int type;
-        public int object1;
-        public int variant1;
-        public int object2;
-        public int variant2;
-
-         public Clue(int inType, int inObject1, int inVariant1, int inObject2, int inVariant2)
-        {
-           type = inType;
-           object1 = inObject1;
-           variant1 = inVariant1;
-           object2 = inObject2;
-           variant2 = inVariant2;
-        }
-    }
-
     
     void Start(){
           Debug.Log("clueHinter start2");
           objetosIndex = reshuffleInt(objetosIndex);
           bool ready = false;
+          int loops = 0;
           while(!ready){
-          GenerateCombination(8);
-          GenerateClues(1,1,2);
+                GenerateCombination(8);
+                GenerateClues(3,3,2);
+                GenerateClues(0,4,4);
+                
 
-          bool validProof = CheckValidClues(4);
+                bool validProof = CheckValidClues(16);
 
-          Debug.Log(validProof);
-          if(validProof){
-              ready = true;
+                Debug.Log(validProof);
+                if(validProof){
+                    ready = true;
+                }
+                loops++;
+                if(loops >= 200){
+                    ready = true;
+                }
           }
-          }
+
+          Debug.Log("Loops:"+loops);
     }
 
   public void GenerateCombination(int objectCount) {

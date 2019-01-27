@@ -1376,18 +1376,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameMan: {fileID: 797990857}
   solution: 
-  clues:
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  clues: []
   objectsClickable:
-  - el cuadro
-  - la television
+  - cuando el cuadro
+  - cuando la television
   - cuando las cortinas
   - cuando el ventilador
   - cuando la mesa de centro
@@ -1408,7 +1400,7 @@ MonoBehaviour:
   - estan abiertas
   o3:
   - esta apagado
-  - encendido pero fijo
+  - encendido sin movimiento
   - encendido pero en movimiento
   o4:
   - tiene frutas encima
