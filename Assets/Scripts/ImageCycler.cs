@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
@@ -10,7 +11,7 @@ public class ImageCycler : MonoBehaviour {
 	
 	private int currentImage;
 
-	void Start (){
+	void LateStart (){
 		if(gameManager==null) {
 			gameManager = FindObjectOfType<GameManager>();
 		}
@@ -18,6 +19,19 @@ public class ImageCycler : MonoBehaviour {
 		currentImage = Random.Range(0,2);
 		GetComponent<SpriteRenderer>().sprite = images[currentImage];
 		gameManager.ChangeObjectState(id, currentImage+1);
+		StartCoroutine(LateStart(2f));
+
+	}
+	IEnumerator LateStart(float waitTime){
+		yield return new WaitForSeconds(waitTime);
+		//Your Function You Want to Call
+		if (gameObject.GetComponent<SoundCycler>() != null) {
+			GetComponent<SoundCycler>().ChangeSound(currentImage);
+			Debug.Log(this.name);
+		}
+		else {
+			Debug.Log(this.name);
+		}
 	}
 	
 	public void OnMouseOver() {
@@ -30,6 +44,9 @@ public class ImageCycler : MonoBehaviour {
 		currentImage++;
 		if (currentImage >= images.Length) {
 			currentImage = 0;
+		}
+		if (GetComponent<SoundCycler>() != null) {
+			GetComponent<SoundCycler>().ChangeSound(currentImage);
 		}
 
 		GetComponent<SpriteRenderer>().sprite = images[currentImage];
