@@ -1378,49 +1378,48 @@ MonoBehaviour:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  objectsClickable:
+  - el cuadro
+  - la television
+  - cuando las cortinas
+  - cuando el ventilador
+  - cuando la mesa de centro
+  - cuando la silla
+  - que el reproductor de musica
+  - cuando mi mascota
+  o0:
+  - es un poster
+  - es una pintura con frutas
+  - es un mapa
   o1:
-  - Poster
-  - Frutas
-  - Mapa
+  - esta apagada
+  - esta encendida con volumen alto
+  - esta encendida con volumen bajo
   o2:
-  - Apagado
-  - Encendido con volumen alto
-  - Encendido con volumen alto
+  - estan cerradas
+  - estan entreabiertas
+  - estan abiertas
   o3:
-  - Cerrada
-  - Entreabierta
-  - Abierta
+  - esta apagado
+  - encendido pero fijo
+  - encendido pero en movimiento
   o4:
-  - Apagado
-  - Encendido pero fijo
-  - Encendido pero en movimiento
+  - tiene frutas encima
+  - tiene un florero encima
+  - no tiene nada encima
   o5:
-  - Frutas encima
-  - Florero encima
-  - Nada encima
+  - es reclinable
+  - es una mecedora
+  - es un sofa
   o6:
-  - Reclinable
-  - Mecedora
-  - Sofa
+  - sea un tocadisco
+  - sea una radio moderna
+  - sea una radio antigua
   o7:
-  - Tocadisco
-  - Radio moderna
-  - Radio antigua
-  o8:
-  - Gato
-  - Perro
-  - Loro
-  objects: []
+  - es un gato
+  - es un perro
+  - es un loro
+  objetosIndex: 0000000001000000020000000300000004000000050000000600000007000000
 --- !u!1 &577950213
 GameObject:
   m_ObjectHideFlags: 0

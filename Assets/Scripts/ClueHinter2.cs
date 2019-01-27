@@ -7,16 +7,19 @@ public class ClueHinter2 : MonoBehaviour
 {
         public GameManager gameMan;
         public int[] solution;
-        public string[] clues = {"","","","","","","",""};
-        public string[] objectsClickable = {"Cuadro","Television","Cortina","Ventilador","Mesa de Centro","Silla","Reproductor de musica","Mascota"};
-        public string[] o0 = {"Poster","Frutas","Mapa"};
-        public string[] o1 = {"Apagado","Encendido con volumen alto","Encendido con volumen alto"};
-        public string[] o2 = {"Cerrada","Entreabierta","Abierta"};
-        public string[] o3 = {"Apagado","Encendido pero fijo","Encendido pero en movimiento"};
-        public string[] o4 = {"Frutas encima","Florero encima","Nada encima"};
-        public string[] o5 = {"Reclinable","Mecedora","Sofa"};
-        public string[] o6 = {"Tocadisco","Radio moderna","Radio antigua"};
-        public string[] o7 = {"Gato","Perro","Loro"};
+        //public string[] clues = {"","","","","","","",""};
+        public string[] clues = {};
+        public string[] objectsClickable = {"el cuadro","la television","cuando las cortinas","cuando el ventilador","cuando la mesa de centro","cuando la silla","que el reproductor de musica","cuando mi mascota"};
+        public string[] o0 = {"es un poster","es una pintura con frutas","es un mapa"};
+        public string[] o1 = {"esta apagada", "esta encendida con volumen alto","esta encendida con volumen bajo"};
+        public string[] o2 = {"estan cerradas","estan entreabiertas","estan abiertas"};
+        public string[] o3 = {"esta apagado","encendido pero fijo","encendido pero en movimiento"};
+        public string[] o4 = {"tiene frutas encima","tiene un florero encima","no tiene nada encima"};
+        public string[] o5 = {"es reclinable","es una mecedora","es un sofa"};
+        public string[] o6 = {"sea un tocadisco","sea una radio moderna","sea una radio antigua"};
+        public string[] o7 = {"es un gato","es un perro","es un loro"};
+
+        public int[] objetosIndex = {0,1,2,3,4,5,6,7};
 
     
 
@@ -25,8 +28,9 @@ public class ClueHinter2 : MonoBehaviour
     
     void Start(){
           Debug.Log("clueHinter start2");
+          objetosIndex = reshuffleInt(objetosIndex);
           GenerateCombination(8);
-          GenerateClues(2,3,3);
+          GenerateClues(2,4,2);
           //solution = gameMan.combination;
           //Debug.Log(GetClueTemplate(0,"a","b","",""));
     }
@@ -60,11 +64,20 @@ public class ClueHinter2 : MonoBehaviour
         int status = 0;
         string statusLabelTrue = "Status";
         string statusLabelFalse = "Status";
-        for (int i = 0; i < clues.Length; i++)
+
+        int index = 0;
+        foreach (var item in objetosIndex)
         {
-            status = solution[i];
+            
+        
+            //for (int i = 0; i < sum; i++)
+            //{
+            bool ocupado = false;
+            statusLabelTrue = "";
+            statusLabelFalse = "";
+            status = solution[item];
             Debug.Log(status);
-           switch (i)
+           switch (item)
             {
                 case 0:
                     statusLabelTrue = o0[solution[0]];
@@ -101,30 +114,31 @@ public class ClueHinter2 : MonoBehaviour
                 default:
                 break;
             } 
-            Debug.Log("objeto:"+objectsClickable[i]);
+            Debug.Log("objeto:"+objectsClickable[item]);
             Debug.Log("labeltru:"+statusLabelTrue);
             Debug.Log("labelfalse"+statusLabelFalse);
 
-            if(clueCountPositive > 0){
-                clues[i] = GetClueTemplate(0,objectsClickable[i],statusLabelTrue,"","");
-                Debug.Log(clues[i]);
+            if(clueCountPositive >= 0){
+                clues[item] = GetClueTemplate(0,objectsClickable[item],statusLabelTrue,"","");
+                Debug.Log(clues[item]);
                 clueCountPositive--;
             }
 
-            if(clueCountPositive == 0 && clueCountNegative > 0){
-                clues[i] = GetClueTemplate(1,objectsClickable[i],statusLabelFalse,"","");
-                Debug.Log(clues[i]);
+            if(clueCountPositive < 0 && clueCountNegative >= 0){
+                clues[item] = GetClueTemplate(1,objectsClickable[item],statusLabelFalse,"","");
+                Debug.Log(clues[item]);
                 clueCountNegative--;
             }
 
-             if(clueCountNegative == 0 && clueCountMixed > 0){
-                clues[i] = GetClueTemplate(2,objectsClickable[i],statusLabelTrue,"","");
-                Debug.Log(clues[i]);
+             if(clueCountNegative < 0 && clueCountMixed >= 0){
+                clues[item] = GetClueTemplate(2,objectsClickable[item],statusLabelTrue,"","");
+                Debug.Log(clues[item]);
                 clueCountMixed--;
             }
+        //}
         }
 
-        //clues = reshuffle(clues);
+        clues = reshuffle(clues);
 
         return clues;
         /*
@@ -143,10 +157,10 @@ public class ClueHinter2 : MonoBehaviour
         switch (number)
         {
             case 0:
-               ret = "Me gusta cuando "+obj+" esta como "+stat+"";
+               ret = "Me gusta cuando "+obj+" "+stat+"";
                 return ret;
             case 1:
-                ret =  "No me gusta "+obj+" cuando esta como "+stat+"";
+                ret =  "No me gusta "+obj+" "+stat+"";
                 return ret;
             case 2:
                 ret =  "Si "+obj+" esta "+stat+" entonces tampoco me gusta que "+obj2+" este "+stat2+"";
@@ -168,5 +182,18 @@ public class ClueHinter2 : MonoBehaviour
         }
 
         return clues;
+    }
+         public int[] reshuffleInt(int[] obj)
+    {
+        // Knuth shuffle algorithm :: courtesy of Wikipedia :)
+        for (int i = 0; i < obj.Length; i++)
+        {
+            int tmp = obj[i];
+            int rand = Random.Range(i, obj.Length);
+            obj[i] = obj[rand];
+            obj[rand] = tmp;
+        }
+
+        return obj;
     }
 }
