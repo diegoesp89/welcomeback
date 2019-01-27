@@ -9,7 +9,7 @@ public class ClueHinter2 : MonoBehaviour
         public int[] solution;
         //public string[] clues = {"","","","","","","",""};
         public string[] clues = {};
-        public string[] objectsClickable = {"el cuadro","la television","cuando las cortinas","cuando el ventilador","cuando la mesa de centro","cuando la silla","que el reproductor de musica","cuando mi mascota"};
+        public string[] objectsClickable = {"cuando el cuadro","cuando la television","cuando las cortinas","cuando el ventilador","cuando la mesa de centro","cuando la silla","que el reproductor de musica","cuando mi mascota"};
         public string[] o0 = {"es un poster","es una pintura con frutas","es un mapa"};
         public string[] o1 = {"esta apagada", "esta encendida con volumen alto","esta encendida con volumen bajo"};
         public string[] o2 = {"estan cerradas","estan entreabiertas","estan abiertas"};
@@ -64,6 +64,8 @@ public class ClueHinter2 : MonoBehaviour
         int status = 0;
         string statusLabelTrue = "Status";
         string statusLabelFalse = "Status";
+         string statusLabelTrue2 = "Status";
+        string statusLabelFalse2 = "Status";
 
         int index = 0;
         foreach (var item in objetosIndex)
@@ -75,6 +77,8 @@ public class ClueHinter2 : MonoBehaviour
             bool ocupado = false;
             statusLabelTrue = "";
             statusLabelFalse = "";
+            statusLabelTrue2 = "";
+            statusLabelFalse2 = "";
             status = solution[item];
             Debug.Log(status);
            switch (item)
@@ -131,7 +135,58 @@ public class ClueHinter2 : MonoBehaviour
             }
 
              if(clueCountNegative < 0 && clueCountMixed >= 0){
-                clues[item] = GetClueTemplate(2,objectsClickable[item],statusLabelTrue,"","");
+                int itemOther = item-1;
+                if(itemOther <= 0){
+                   itemOther = itemOther+2;
+                }
+
+                if(item == itemOther){
+                    itemOther++;
+                }
+
+                if(itemOther == 7){
+                    itemOther = 2;
+                }
+                            switch (itemOther)
+                        {
+                            case 0:
+                                statusLabelTrue2 = o0[solution[0]];
+                                statusLabelFalse2 = o0[gimmeOneFalse(solution[0])];
+                                break;
+                            case 1:
+                                statusLabelTrue2 = o1[solution[1]];
+                                statusLabelFalse2 = o1[gimmeOneFalse(solution[1])];
+                                break;
+                            case 2:
+                                statusLabelTrue2 = o2[solution[2]];
+                                statusLabelFalse2 = o2[gimmeOneFalse(solution[2])];
+                                break;
+                            case 3:
+                                statusLabelTrue2 = o3[solution[3]];
+                                statusLabelFalse2 = o3[gimmeOneFalse(solution[3])];
+                                break;
+                            case 4:
+                                statusLabelTrue2 = o4[solution[4]];
+                                statusLabelFalse2 = o4[gimmeOneFalse(solution[4])];
+                                break;
+                            case 5:
+                                statusLabelTrue2 = o5[solution[5]];
+                                statusLabelFalse2 = o5[gimmeOneFalse(solution[5])];
+                                break;
+                            case 6:
+                                statusLabelTrue2 = o6[solution[6]];
+                                statusLabelFalse2 = o6[gimmeOneFalse(solution[6])];
+                                break;
+                            case 7:
+                                statusLabelTrue2 = o7[solution[7]];
+                                statusLabelFalse2 = o7[gimmeOneFalse(solution[7])];
+                                break;
+                            default:
+                            break;
+                        } 
+
+                //o7[gimmeOneFalse(solution[itemOther]
+                clues[item] = GetClueTemplate(2,objectsClickable[item],statusLabelFalse,objectsClickable[itemOther],statusLabelFalse2);
                 Debug.Log(clues[item]);
                 clueCountMixed--;
             }
@@ -163,7 +218,7 @@ public class ClueHinter2 : MonoBehaviour
                 ret =  "No me gusta "+obj+" "+stat+"";
                 return ret;
             case 2:
-                ret =  "Si "+obj+" esta "+stat+" entonces tampoco me gusta que "+obj2+" este "+stat2+"";
+                ret =  "nunca van juntos '"+obj+" "+stat+"' y '"+obj2+" "+stat2+"'";
                 return ret;
             default:
                 return "An error has ocurred. Rip Game.";
