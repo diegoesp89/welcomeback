@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class ClueHinter : MonoBehaviour
 {
-    public string[] clues = {"","","","","","","","","","","","","","","","","",""};
+    public string[] clues = { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
+    public List<string> knownClues;
+    public Text text;
+
+    private bool shown = false;
+
     /**
      * Clue Format
      * type: 0->Positive, 1->Negative, 2->XOR
-     * info: (Object, Variant)
-     * info2: (Object, Variant) Used if type == 2
      * Note: 0 <= Object < Number of Objects
      *       0 <= Variant < Number of Variants
      */
@@ -24,19 +28,23 @@ public class ClueHinter : MonoBehaviour
         public int variant2;
     }
 
-    
-    
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
     /// any of the Update methods is called the first time.
     /// </summary>
-    public void Start(){
+    public void Start()
+    {
         Debug.Log("clueHinter start");
-       /* if (gameManRef == null) {
-            gameManRef = FindObjectOfType<GameManager>();
-        }*/
+        for (int i = 0; i < 10; i++)
+        {
+            knownClues.Add("Pista " + (i + 1));
+        }
+        Debug.Log(knownClues);
+        /* if (gameManRef == null) {
+             gameManRef = FindObjectOfType<GameManager>();
+         }*/
 
-       // GenerateClues(2,8,8);
+        // GenerateClues(2,8,8);
     }
     public string[] GenerateClues(int clueCountPositive, int clueCountNegative, int clueCountMixed)
     {
@@ -51,13 +59,13 @@ public class ClueHinter : MonoBehaviour
         for (int i = 0; i < clueCountNegative; i++)
         {
             clues[i + count] = GetClueTemplate(1);
-             Debug.Log(clues[i]);
+            Debug.Log(clues[i]);
             count++;
         }
         for (int i = 0; i < clueCountMixed; i++)
         {
             clues[i + count] = GetClueTemplate(2);
-             Debug.Log(clues[i]);
+            Debug.Log(clues[i]);
             count++;
         }
 
@@ -71,7 +79,8 @@ public class ClueHinter : MonoBehaviour
          */
     }
 
-    public string[] gimmeClues(int person, int cluesPerPerson){
+    public string[] gimmeClues(int person, int cluesPerPerson)
+    {
         //int person es el id de la persona, debe empezar por 0 y si son 4 personas llega hasta 3
         int cluesCount = clues.Length;
         string[] cluesResponse = new string[cluesPerPerson];
@@ -250,16 +259,29 @@ public class ClueHinter : MonoBehaviour
     /**
      * Shows individual clue, from a person.
      */
-    public string GetClue(int index, string obj, string state) {
+    public string GetClue(int index, string obj, string state)
+    {
         return clues[index].Replace("%s%", state).Replace("%o%", obj);
     }
 
     public void ShowClues()
     {
-        //TODO SHOW BOX FOR HINTS
+        Debug.Log("ShowClues");
+        if (shown)
+        {
+            text.text = "";
+        }
+        else
+        {
+            string temp = "";
+            foreach (var clue in knownClues)
+            {
+                temp += clue + '\n';
+            }
+            text.text = temp;
+        }
+        shown = !shown;
     }
-
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         Debug.Log("woo");
