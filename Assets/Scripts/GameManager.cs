@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour {
 
     }
 
-    public void Awake() {
+    public void awake() {
         Debug.Log("Start!");
         GenerateCombination(8);
     }
