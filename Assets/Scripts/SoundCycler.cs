@@ -21,19 +21,28 @@ public class SoundCycler : MonoBehaviour {
 			audioMan = FindObjectOfType<AudioManager>();
 		}
 		//Make initial image random.
-		currentSound = Random.Range(0,2);
-		audioMan.ChangeSong(sounds[currentSound]);
-		gameManager.ChangeObjectState(id, currentSound+1);
+		if (GetComponent<ImageCycler>() == null) {
+			currentSound = Random.Range(0, 2);
+			audioMan.ChangeSong(sounds[currentSound]);
+			gameManager.ChangeObjectState(id, currentSound + 1);
+		}
 	}
 
 
 	public void OnMouseOver() {
-		if(Input.GetMouseButtonDown(0)) {
-			CycleSound();
+		if (GetComponent<ImageCycler>() == null) {
+			if(Input.GetMouseButtonDown(0)) {
+				CycleSound();
+			}
 		}
 	}
 
-	private void CycleSound() { 
+	public void ChangeSound(int id) {
+		currentSound = id;
+		audioMan.ChangeSong(sounds[currentSound]);	
+	}
+
+	private void CycleSound() {
 		currentSound++;
 		if (currentSound >= sounds.Length) {
 			currentSound = 0;

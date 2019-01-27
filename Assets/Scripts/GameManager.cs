@@ -22,7 +22,12 @@ public class GameManager : MonoBehaviour {
         Debug.Log("Start!");
         GenerateCombination(8);
     }
-
+/*
+    public void Start() {
+        var dialog = FindObjectOfType<DialogManager>();
+        dialog.ShowDialog("This is a test... ", 10);
+    }
+*/
     public void GenerateCombination(int objectCount) {
         combination = new int[objectCount];
         for (int i = 0; i < objectCount; i++) {
@@ -42,7 +47,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public int[] getCombination(){
+    public int[] GetCombination(){
         return combination;
     }
 
