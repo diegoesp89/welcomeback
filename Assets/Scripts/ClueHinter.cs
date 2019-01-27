@@ -39,7 +39,6 @@ public class ClueHinter : MonoBehaviour
         {
             knownClues.Add("Pista " + (i + 1));
         }
-        Debug.Log(knownClues);
         /* if (gameManRef == null) {
              gameManRef = FindObjectOfType<GameManager>();
          }*/
@@ -139,6 +138,7 @@ public class ClueHinter : MonoBehaviour
                             int o, v;
                             v = (SolArray[C.object1, i] - 2) % Variants;
                             o = (SolArray[C.object1, i] - 2) / Variants;
+                            SolArray[o, v] = 0;
                         }
                         SolArray[C.object1, i] = (i == C.variant1) ? 1 : 0;
                     }
@@ -154,16 +154,16 @@ public class ClueHinter : MonoBehaviour
                     }
                     if (SolArray[C.object1, C.variant1] == 1)
                     {
-                        SolArray[C.object1, C.variant2] = 0;
+                        SolArray[C.object2, C.variant2] = 0;
                     }
-                    else if (SolArray[C.object1, C.variant2] == 1)
+                    else if (SolArray[C.object2, C.variant2] == 1)
                     {
                         SolArray[C.object1, C.variant1] = 0;
                     }
                     else
                     {
-                        SolArray[C.object1, C.variant1] = C.variant2 + C.object1 * Variants + 2;
-                        SolArray[C.object1, C.variant2] = C.variant1 + C.object1 * Variants + 2;
+                        SolArray[C.object1, C.variant1] = C.variant2 + C.object2 * Variants + 2;
+                        SolArray[C.object2, C.variant2] = C.variant1 + C.object1 * Variants + 2;
                     }
                     break;
                 default:
