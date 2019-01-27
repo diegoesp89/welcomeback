@@ -7,7 +7,6 @@ public class ClueHinter2 : MonoBehaviour
 {
         public GameManager gameMan;
         public int[] solution;
-        //public string[] clues = {"","","","","","","",""};
         public string[] clues = {};
         public string[] objectsClickable = {"cuando el cuadro","cuando la television","cuando las cortinas","cuando el ventilador","cuando la mesa de centro","cuando la silla","que el reproductor de musica","cuando mi mascota"};
         public string[] o0 = {"es un poster","es una pintura con frutas","es un mapa"};
@@ -19,20 +18,44 @@ public class ClueHinter2 : MonoBehaviour
         public string[] o6 = {"sea un tocadisco","sea una radio moderna","sea una radio antigua"};
         public string[] o7 = {"es un gato","es un perro","es un loro"};
 
-        public int[] objetosIndex = {0,1,2,3,4,5,6,7};
+        //public int[] objetosIndex = {0,1,2,3,4,5,6,7};
+        public int[] objetosIndex = {0,1,2,3};
+        int[,] cluesInt = new int[4,5];
+        
+        public struct Clue
+    {
+        public int type;
+        public int object1;
+        public int variant1;
+        public int object2;
+        public int variant2;
 
-    
+         public Clue(int inType, int inObject1, int inVariant1, int inObject2, int inVariant2)
+        {
+           type = inType;
+           object1 = inObject1;
+           variant1 = inVariant1;
+           object2 = inObject2;
+           variant2 = inVariant2;
+        }
+    }
 
-        //public string[] objects = {o1,o2};
-     //   public string[][] objects = {o1,o2,o3,o4,o5,o6,o7,o8};
     
     void Start(){
           Debug.Log("clueHinter start2");
           objetosIndex = reshuffleInt(objetosIndex);
+          bool ready = false;
+          while(!ready){
           GenerateCombination(8);
-          GenerateClues(2,4,2);
-          //solution = gameMan.combination;
-          //Debug.Log(GetClueTemplate(0,"a","b","",""));
+          GenerateClues(1,1,2);
+
+          bool validProof = CheckValidClues(4);
+
+          Debug.Log(validProof);
+          if(validProof){
+              ready = true;
+          }
+          }
     }
 
   public void GenerateCombination(int objectCount) {
@@ -124,13 +147,21 @@ public class ClueHinter2 : MonoBehaviour
 
             if(clueCountPositive >= 0){
                 clues[item] = GetClueTemplate(0,objectsClickable[item],statusLabelTrue,"","");
-                Debug.Log(clues[item]);
+                cluesInt[item,0] = 0;
+                cluesInt[item,1] = item;
+                cluesInt[item,2] = solution[item];
+                cluesInt[item,3] = 0;
+                cluesInt[item,4] = 0;
                 clueCountPositive--;
             }
 
             if(clueCountPositive < 0 && clueCountNegative >= 0){
                 clues[item] = GetClueTemplate(1,objectsClickable[item],statusLabelFalse,"","");
-                Debug.Log(clues[item]);
+                cluesInt[item,0] = 1;
+                cluesInt[item,1] = item;
+                cluesInt[item,2] = solution[item];
+                cluesInt[item,3] = 0;
+                cluesInt[item,4] = 0;
                 clueCountNegative--;
             }
 
@@ -187,7 +218,11 @@ public class ClueHinter2 : MonoBehaviour
 
                 //o7[gimmeOneFalse(solution[itemOther]
                 clues[item] = GetClueTemplate(2,objectsClickable[item],statusLabelFalse,objectsClickable[itemOther],statusLabelFalse2);
-                Debug.Log(clues[item]);
+                cluesInt[item,0] = 2;
+                cluesInt[item,1] = item;
+                cluesInt[item,2] = gimmeOneFalse(solution[item]);
+                cluesInt[item,3] = itemOther;
+                cluesInt[item,4] = gimmeOneFalse(solution[itemOther]);
                 clueCountMixed--;
             }
         //}
@@ -250,5 +285,128 @@ public class ClueHinter2 : MonoBehaviour
         }
 
         return obj;
+    }
+
+    public bool CheckValidClues(int cluesQ)
+    {
+        int[,] Clues = new int[8,5];
+        Clues = cluesInt;
+        int Objects = 8, Variants = 3;
+
+        int[,] SolArray = new int[Objects, Variants]; //Objects, Variants
+        //Fill SolArray
+        for (int i = 0; i < Objects; i++) for (int j = 0; j < Variants; j++)
+                SolArray[i, j] = -1;
+
+        //First Pass /Preprocessing
+        for (int i = 0; i < cluesQ; i++)
+        {
+            int type = Clues[i,0];
+            switch (type)
+            {
+                case 0:
+                    for (int j = 0; j < Variants; j++)
+                    {
+                        if (SolArray[Clues[i,1], j] > 1)
+                        {
+                            int o, v;
+                            v = (SolArray[Clues[i,1], j] - 2) % Variants;
+                            o = (SolArray[Clues[i,1], j] - 2) / Variants;
+                        }
+                        SolArray[Clues[i,1], j] = (j == Clues[i,2]) ? 1 : 0;
+                    }
+                    break;
+                case 1:
+                    SolArray[Clues[i,1], Clues[i,2]] = 0;
+                    break;
+                case 2:
+                    if (SolArray[Clues[i,1], Clues[i,2]] == 1 && SolArray[Clues[i,1], Clues[i,2]] == 1)
+                    {
+                        Debug.Log("Contradiction with Clue Type 2");
+                        return false;
+                    }
+                    if (SolArray[Clues[i,1], Clues[i,2]] == 1)
+                    {
+                        SolArray[Clues[i,1], Clues[i,4]] = 0;
+                    }
+                    else if (SolArray[Clues[i,1], Clues[i,4]] == 1)
+                    {
+                        SolArray[Clues[i,1], Clues[i,2]] = 0;
+                    }
+                    else
+                    {
+                        SolArray[Clues[i,1], Clues[i,2]] = Clues[i,4] + Clues[i,1] * Variants + 2;
+                        SolArray[Clues[i,1], Clues[i,4]] = Clues[i,2] + Clues[i,1] * Variants + 2;
+                    }
+                    break;
+                default:
+                    Debug.Log("Error in Clue Format");
+                    break;
+            }
+           
+        }
+
+        //Processing
+        bool change = true;
+        int count = 0;
+        while (change)
+        {
+            count++;
+            change = false;
+            //Check if there's enough info for each Object
+            for (int i = 0; i < Objects; i++)
+            {
+                //Count Negatives (0) and Positives (1)
+                int neg = 0;
+                int pos = 0;
+                for (int j = 0; j < Variants; j++)
+                {
+                    neg += (SolArray[i, j] == 0) ? 1 : 0;
+                    pos += (SolArray[i, j] == 1) ? 1 : 0;
+                }
+
+                if (pos == 1)
+                    continue;
+                if (pos > 1)
+                {
+                    Debug.Log("Multiple Positives per Object");
+                    return false;
+                }
+                if (neg == Variants)
+                {
+                    Debug.Log("All variants are Negative");
+                    return false;
+                }
+                if (neg == Variants - 1)
+                {
+                    change = true;
+                    for (int j = 0; j < Variants; j++) if (SolArray[i, j] != 0)
+                        {
+                            int o, v;
+                            v = (SolArray[i, j] - 2) % Variants;
+                            o = (SolArray[i, j] - 2) / Variants;
+
+                            if (SolArray[o, v] == 1)
+                            {
+                                Debug.Log("Contradiction with Clue type 2");
+                                return false;
+                            }
+                            SolArray[i, j] = 1; //This has to be true (all others variants are false)
+                            SolArray[o, v] = 0; //This can't be true
+                            break;
+                        }
+                }
+            }
+        }
+        //Re-do checks if less strict conditions are needed
+        int solved = 0;
+        for (int i = 0; i < Objects; i++) for (int j = 0; j < Variants; j++) solved += (SolArray[i, j] == 1) ? 1 : 0;
+
+        if (solved < Objects)
+        {
+            Debug.Log("Clues aren't enough");
+            return false;
+        }
+        return true;
     }
 }
