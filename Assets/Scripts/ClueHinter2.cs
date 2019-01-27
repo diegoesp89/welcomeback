@@ -7,7 +7,7 @@ public class ClueHinter2 : MonoBehaviour
 {
         public GameManager gameMan;
         public int[] solution;
-        public string[] clues = {};
+        public string[] clues;
         public string[] objectsClickable = {"cuando el cuadro","cuando la television","cuando las cortinas","cuando el ventilador","cuando la mesa de centro","cuando la silla","que el reproductor de musica","cuando mi mascota"};
         public string[] o0 = {"es un poster","es una pintura con frutas","es un mapa"};
         public string[] o1 = {"esta apagada", "esta encendida con volumen alto","esta encendida con volumen bajo"};
@@ -23,6 +23,7 @@ public class ClueHinter2 : MonoBehaviour
         
     
     void Start(){
+        Debug.Log( clues.Length);
           Debug.Log("clueHinter start2");
           objetosIndex = reshuffleInt(objetosIndex);
           bool ready = false;
@@ -136,6 +137,8 @@ public class ClueHinter2 : MonoBehaviour
             Debug.Log("labelfalse"+statusLabelFalse);
 
             if(clueCountPositive >= 0){
+                Debug.Log("Length: "+clues.Length);
+                Debug.Log("index: "+item);
                 clues[item] = GetClueTemplate(0,objectsClickable[item],statusLabelTrue,"","");
                 cluesInt[item,0] = 0;
                 cluesInt[item,1] = item;
@@ -217,7 +220,7 @@ public class ClueHinter2 : MonoBehaviour
             }
         //}
         }
-
+        Debug.Log(clues.Length);
         clues = reshuffle(clues);
 
         return clues;

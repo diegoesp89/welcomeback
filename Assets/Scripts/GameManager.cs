@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour {
         var dialog = FindObjectOfType<DialogManager>();
         dialog.ShowDialog("This is a test... ", 10);
     }
-*/
+*/ 
     public void GenerateCombination(int objectCount) {
         combination = new int[objectCount];
         for (int i = 0; i < objectCount; i++) {

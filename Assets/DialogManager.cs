@@ -9,9 +9,9 @@ public class DialogManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        GetComponent<RectTransform>().position = new Vector3(0, -5);
+        //GetComponent<RectTransform>().position = new Vector3(0, -5);
         var rt = GetComponent<RectTransform>().sizeDelta;
-        GetComponent<RectTransform>().sizeDelta = new Vector2(rt.x * 0.0625f, rt.y * 0.0625f);
+        //GetComponent<RectTransform>().sizeDelta = new Vector2(rt.x * 0.0625f, rt.y * 0.0625f);
     }
 
 
